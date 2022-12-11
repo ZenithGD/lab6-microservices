@@ -10,7 +10,6 @@ eureka:
   server:
     eviction-interval-timer-in-ms: 1000
     renewal-percent-threshold: 0.85
-
 logging:
   level:
     com.netflix.eureka: OFF
