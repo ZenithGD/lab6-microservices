@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.js.translate.context.Namer.kotlin
 
 plugins {
     id("io.spring.dependency-management") version "1.1.0"
@@ -37,11 +38,16 @@ subprojects {
             }
         }
     }
+
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget = "11"
         }
+    }
+
+    tasks.test {
+        useJUnitPlatform()
     }
 }
 
@@ -73,5 +79,17 @@ project(":web") {
         implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
         implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
         implementation("org.springframework.boot:spring-boot-starter-actuator")
+    }
+}
+
+project(":gateway") {
+    dependencies {
+        implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+        implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+        implementation("org.springframework.boot:spring-boot-starter-actuator")
+        implementation("org.springframework.boot:spring-boot-starter-webflux")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
     }
 }

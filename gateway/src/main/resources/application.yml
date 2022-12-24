@@ -1,0 +1,38 @@
+server:
+  port: 4444
+
+# Discovery Server Access
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1111/eureka/
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: "registration"
+          uri: "http://localhost:1111"
+          order: 1
+          predicates:
+            - Path=/registration/**
+          filters:
+            - RewritePath=/registration/(?<segment>.*),/$\{segment}
+        - id: "eureka"
+          uri: "http://localhost:1111"
+          order: 2
+          predicates:
+            - Path=/eureka/**
+        - id: "web-service"
+          uri: "http://localhost:3333"
+          order: 3
+          predicates:
+            - Path=/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
